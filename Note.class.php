@@ -25,7 +25,21 @@ class Note {
 	}
 	
 	
-	function getAllNotes($q) {
+	function getAllNotes($q, $sort, $order) {
+		
+		$allowedSort = ["id", "note", "color"];
+		
+		if(!in_array($sort, $allowedSort)) {
+			$sort = "id"; //sorteerimine id järgi, kui ei olnud lubatud tulpade seas
+		}
+		
+		$orderBy = "ASC";
+		
+		if($order == "DESC"){
+			$orderBy = "DESC";
+		}
+		
+		echo "Sorteerin ".$sort." ".$orderBy." ";
 		
 		//Otsing toimub
 		if($q != "") {
@@ -37,6 +51,7 @@ class Note {
 			FROM colorNotes
 			WHERE deleted IS NULL
 			AND (note LIKE ? OR color LIKE ?)
+			ORDER BY $sort $orderBy
 		");
 		
 		$searchWord = "%".$q."%";
@@ -49,6 +64,7 @@ class Note {
 			SELECT id, note, color
 			FROM colorNotes
 			WHERE deleted IS NULL
+			ORDER BY $sort $orderBy
 		");
 		
 		}

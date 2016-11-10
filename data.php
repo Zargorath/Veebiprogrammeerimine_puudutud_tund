@@ -46,8 +46,18 @@
 		
 	}
 	
+	$sort = "id";
+	$order = "ASC";
 	
-	$notes = $Note->getAllNotes($q);
+	if(isset($_GET["sort"]) && isset($_GET["order"])) {
+		
+		$sort = $_GET["sort"];
+		$order = $_GET["order"];
+		
+	}
+	
+	
+	$notes = $Note->getAllNotes($q, $sort, $order);
 	
 	//echo "<pre>";
 	//var_dump($notes);
@@ -108,9 +118,51 @@
 	$html = "<table>";
 		
 		$html .= "<tr>";
-			$html .= "<th>id</th>";
-			$html .= "<th>Märkus</th>";
-			$html .= "<th>Värv</th>";
+		
+			$orderId = "ASC";
+			
+			if(isset($_GET["order"]) && $_GET["order"] == "ASC" && $_GET["sort"] == "id") {
+				
+				$orderId = "DESC";
+				
+			}
+			
+			$orderNote = "ASC";
+			
+			if (isset($_GET["order"]) && $_GET["order"] == "ASC" && $_GET["sort"] == "color") {
+				
+				$orderNote = "DESC";
+				
+			}
+			
+			$orderColor = "ASC";
+			
+			if (isset($_GET["order"]) && $_GET["order"] == "ASC" && $_GET["sort"] == "note") {
+				
+				$orderColor = "DESC";
+				
+			}
+		
+		
+		
+			$html .= "<th>
+			
+				<a href='?q=".$q."&sort=id&order=".$orderId."'>
+					id
+				</a>
+			</th>";
+			
+			
+			$html .= "<th>
+			<a href='?q=".$q."&sort=note&order=".$orderNote."'>
+				Märkus
+				</a>	
+			</th>";
+			$html .= "<th>
+			<a href='?q=".$q."&sort=color&order=".$orderColor."'>
+				Värv
+			</a>
+			</th>";
 		$html .= "</tr>";
 
 	foreach ($notes as $note) {
